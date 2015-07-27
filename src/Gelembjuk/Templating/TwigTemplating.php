@@ -29,7 +29,19 @@ class TwigTemplating  extends \Twig_Environment implements TemplatingInterface {
 	 * @param string|array Path(s) to plugins sirectory
 	 */
 	protected function initPlugins($plugins = '') {
+		if (is_dir(dirname(__FILE__).'/TwigPlugins')) {
+			$this->loadPluginsFromDirectory(dirname(__FILE__).'/TwigPlugins');
+		}
 		
+		if (isset($plugins)) {
+			if (is_array($plugins)) {
+				foreach ($plugins as $path) {
+					$this->loadPluginsFromDirectory($path);
+				}
+			} elseif ($plugins != '') {
+				$this->loadPluginsFromDirectory($plugins);
+			}
+		}
 	}
 	/**
 	 * Empty all previously set template variables
@@ -91,5 +103,38 @@ class TwigTemplating  extends \Twig_Environment implements TemplatingInterface {
 		$this->setLoader($loader);
 		
 		return $this->render('index', $this->template_vars);
+	}
+	/**
+	 * Load plugins from a directory 
+	 */
+	protected function loadPluginsFromDirectory($dirpath) {
+		if (!is_dir($dirpath)) {
+			return false;
+		}
+		
+		$contents = @scandir($dirpath);
+		
+		if (is_array($contents)) {
+			foreach ($contents as $file) {
+				if (substr($file,-4) == '.php') {
+					$class = '\\' . substr($file,0,-4);
+					
+					if($class != '') {
+						// is this secure enough?
+						// we don't use autoloader as we don't know how taht plugins are stored
+						require_once($dirpath.'/'.$file);
+						
+						try {
+							$twig_object = new $class();
+						
+							if ($twig_object instanceof \Twig_Extension) {
+								$this->addExtension($twig_object);
+							}
+						} catch (\Extension $e) {
+						}
+					}
+				}
+			}
+		}
 	}
 }
