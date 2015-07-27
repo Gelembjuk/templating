@@ -51,7 +51,7 @@ File **homepage.htm** in case of Smarty
 ```html
 <div>
 
-<h1>Hello, {$lastname}, {$firstname} </h1> 
+<h1>Hello {$lastname}, {$firstname} </h1> 
 
 </div>
 
@@ -62,7 +62,7 @@ File **homepage.htm** in case of Twig
 ```html
 <div>
 
-<h1>Hello, {{ lastname }}, {{ firstname }} </h1> 
+<h1>Hello {{ lastname }}, {{ firstname }} </h1> 
 
 </div>
 
