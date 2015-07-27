@@ -1,0 +1,19 @@
+{
+    "name": "gelembjuk/templating",
+    "description": "Common interface for different PHP templating engines like Smarty. This package allows to switch between engines witout changes in our PHP code",
+    "require": {
+        "smarty/smarty": "1.0.*"
+    },
+    "require-dev":{},
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Roman Gelembjuk",
+            "email": "roman@gelembjuk.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "Gelembjuk":"src/" }
+    },
+    "minimum-stability": "dev"
+}
