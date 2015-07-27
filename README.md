@@ -7,6 +7,8 @@ The package was created to be able to migrate to different popular PHP templatin
 ### Installation
 Using composer: [gelembjuk/templating](http://packagist.org/packages/gelembjuk/templating) ``` require: {"gelembjuk/templating": "1.*"} ```
 
+Additionally, you have to install a template engine you want to use - smarty/smarty or twig/twig (later i hope to add support of other engines).
+
 ### Configuration
 
 Configuration is done in run time with a constructor options (as hash argument)
