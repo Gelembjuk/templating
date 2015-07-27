@@ -19,8 +19,8 @@ $engineclass = 'Gelembjuk\\Templating\\SmartyTemplating';
 $templatesdir = $thisdirectory .'template_smarty/';
 
 // TWIG
-$engineclass = 'Gelembjuk\\Templating\\TwigTemplating';
-$templatesdir = $thisdirectory .'template_twig/';
+//$engineclass = 'Gelembjuk\\Templating\\TwigTemplating';
+//$templatesdir = $thisdirectory .'template_twig/';
 
 
 
