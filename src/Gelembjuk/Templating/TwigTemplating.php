@@ -1,7 +1,7 @@
 <?php
 
 /**
-* This class inherits all functionality from Smarty and implements TemplatingInterface interface
+* This class inherits all functionality from Twig Template Engine and implements TemplatingInterface interface
 * The class can be easy replaced with other class implementing same interface and this allows to
 * change your templating engine easy without PHP changes in your app.
 *
@@ -17,34 +17,25 @@
 
 namespace Gelembjuk\Templating;
 
-class SmartyTemplating  extends \Smarty implements TemplatingInterface {
+class TwigTemplating  extends \Twig_Environment implements TemplatingInterface {
 	use TemplatingTrait;
+	
+	public function __construct($loader = null) {
+		parent::__construct($loader);
+	}
 	/**
 	 * Init plugins and extra plugins on the engine
 	 * 
 	 * @param string|array Path(s) to plugins sirectory
 	 */
 	protected function initPlugins($plugins = '') {
-		// add plugis paths
-		if (is_dir(dirname(__FILE__).'/SmartyPlugins')) {
-			$this->addPluginsDir(dirname(__FILE__).'/SmartyPlugins');
-		}
 		
-		if (isset($plugins)) {
-			if (is_array($plugins)) {
-				foreach ($plugins as $path) {
-					$this->addPluginsDir($path);
-				}
-			} elseif ($plugins != '') {
-				$this->addPluginsDir($plugins);
-			}
-		}
 	}
 	/**
 	 * Empty all previously set template variables
 	 */
 	public function cleanVars() {
-		$this->clear_all_assign();
+		$this->template_vars = array();
 	}
 	/**
 	 * Set new template variable
@@ -53,7 +44,7 @@ class SmartyTemplating  extends \Smarty implements TemplatingInterface {
 	 * @paral mixed $val Variable value. Can be different type, depends on supported types of engine 
 	 */
 	public function setVar($name,$val) {
-		$this->assign($name,$val);
+		$this->template_vars[$name] = $val;
 	}
 	/**
 	 * Set many variables 
@@ -73,7 +64,7 @@ class SmartyTemplating  extends \Smarty implements TemplatingInterface {
 	 * @return mixed Variable value
 	 */
 	public function getVar($name) {
-		return $this->get_template_vars($name);
+		return $this->template_vars[$name];
 	}
 	/**
 	 * Fetch prepared file template and return complete html document
@@ -81,8 +72,11 @@ class SmartyTemplating  extends \Smarty implements TemplatingInterface {
 	 * @return string HTML document with all data included 
 	 */
 	protected function fetchFromFile() {
-		$this->template_dir = $this->template_dir_orig;
-		return $this->fetch($this->template.'.'.$this->templates_extension);
+		// TODO
+		// we don't check if there was loader already set. but it would be useful like optimization
+		$loader = new \Twig_Loader_Filesystem($this->template_dir_orig);
+		$this->setLoader($loader);
+		return $this->render($this->template.'.'.$this->templates_extension, $this->template_vars);
 	}
 	
 	/**
@@ -91,6 +85,11 @@ class SmartyTemplating  extends \Smarty implements TemplatingInterface {
 	 * @return string HTML document with all data included 
 	 */
 	protected function fetchFromString() {
-		return $this->fetch('string:'.$this->template_data);
+		// loader is created each time as value of index can be changed
+		// maybe there is way to do this without creating new loader each time
+		$loader = new \Twig_Loader_Array(array('index' => $this->template_data));
+		$this->setLoader($loader);
+		
+		return $this->render('index', $this->template_vars);
 	}
 }

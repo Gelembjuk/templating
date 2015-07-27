@@ -6,26 +6,40 @@
  * This example is part of gelembjuk/templating package by Roman Gelembjuk (@gelembjuk)
  */
 
+// ==================== CONFIGURATION ==================================
 // path to your composer autoloader
 require ('vendor/autoload.php');
+
+$thisdirectory = dirname(__FILE__) . '/'; // get parent directory of this script
+
+// TEMPLATE ENGINE
+
+// SMARTY
+$engineclass = 'Gelembjuk\\Templating\\SmartyTemplating';
+$templatesdir = $thisdirectory .'template_smarty/';
+
+// TWIG
+$engineclass = 'Gelembjuk\\Templating\\TwigTemplating';
+$templatesdir = $thisdirectory .'template_twig/';
+
+
 
 // this is the template that will include all other pages inside it
 // just standard trick to have header and footer same for all pages
 $out_template = 'main';
 
-$thisdirectory = dirname(__FILE__) . '/'; // get parent directory of this script
-
 $templateroptions = array(
-		'templatepath' => $thisdirectory .'template/', // templates dir is in same folder with this script
+		'templatepath' => $templatesdir, // templates dir is in same folder with this script
 		'compiledir' => $thisdirectory .'compile_dir/',
 		'usecache' => false, // don't cache 
 		'extension' => 'htm' // our templates files will have htm extension
 	);
 	
 // create and init templater
-// if you want to use other engine then Smarty then you will have to change only next line
-$templater = new Gelembjuk\Templating\SmartyTemplating();
+$templater = new $engineclass();
 $templater->init($templateroptions);
+
+// ==================== WEB APP LOGIC ==================================
 
 $page = $_REQUEST['page'];
 
