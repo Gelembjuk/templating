@@ -20,8 +20,30 @@ namespace Gelembjuk\Templating;
 class TwigTemplating  extends \Twig_Environment implements TemplatingInterface {
 	use TemplatingTrait;
 	
-	public function __construct($loader = null) {
-		parent::__construct($loader);
+	/**
+	 * Check if there are all settings ready to do oprtation with templates saved in filesystem
+	 * This is standard set of checks. We expect many engines can use only this
+	 * 
+	 * @return boolean True on success and raises exception if there are problems
+	 */
+	protected function checkFileSystemTemplatingConfigured() {
+		if (trim($this->template_dir_orig) == '') {
+			throw new \Exception('Templates directory is not set');
+		}
+		if (!is_dir($this->template_dir_orig)) {
+			throw new \Exception(sprintf('Templates directory %s not found',$this->template_dir_orig));
+		}
+		// compile dir is not needed
+		if ($this->caching) {
+			// if cache is On the cache path must be present
+			if (!is_dir($this->cache_dir)) {
+				throw new \Exception(sprintf('Templates cache directory %s not found',$this->cache_dir));
+			}
+			if (!is_writable($this->cache_dir)) {
+				throw new \Exception(sprintf('Templates cache directory %s is not writable',$this->cache_dir));
+			}
+		}
+		return true;
 	}
 	/**
 	 * Init plugins and extra plugins on the engine
