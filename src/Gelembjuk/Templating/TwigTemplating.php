@@ -110,6 +110,10 @@ class TwigTemplating  extends \Twig_Environment implements TemplatingInterface {
 		// we don't check if there was loader already set. but it would be useful like optimization
 		$loader = new \Twig_Loader_Filesystem($this->template_dir_orig);
 		$this->setLoader($loader);
+		
+		if ($this->caching) {
+			$this->setCache($this->cache_dir);
+		}
 		return $this->render($this->template.'.'.$this->templates_extension, $this->template_vars);
 	}
 	
