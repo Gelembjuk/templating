@@ -12,17 +12,16 @@
  */
 function smarty_function_t($params, Smarty_Internal_Template $template)
 {
-	$key = (isset($params['key'])?$params['key']:$params['k']);
-	
-	if (!function_exists('getApplicationInstance')) {
-		// smarty is used out of context of Gelembjuk\WebApp package
-		// just return a key
+	$application = $template->getApplication();
+
+	if (!is_object($application)) {
 		return $key;
 	}
+
+	$key = (isset($params['key'])?$params['key']:$params['k']);
 	
 	$group = (isset($params['group'])?$params['group']:$params['g']);
 	
-	$application = getApplicationInstance();
 	return $application->getText($key,$group,$params['p1'],$params['p2'],$params['p3'],$params['p4'],$params['p5']);
 }
 ?>

@@ -42,6 +42,12 @@ trait TemplatingTrait {
 	 */
 	protected $template_vars = array();
 	/**
+	 * Reference to an application object that uses a templating class
+	 * 
+	 * @var array
+	 */
+	protected $application = null;
+	/**
 	* Extension of template files. Defauls is .tpl
 	*
 	* @var string
@@ -224,10 +230,26 @@ trait TemplatingTrait {
 	/**
 	 * Init plugins and extra plugins on the engine
 	 * 
-	 * @param string|array Path(s) to plugins sirectory
+	 * @param string|array $plugins Path(s) to plugins sirectory
 	 */
 	protected function initPlugins($plugins = '') {
 		return true;
+	}
+	/**
+	 * Returns application object reference
+	 * 
+	 * @return object Application object
+	 */
+	public function getApplication() {
+		return $this->application;
+	}
+	/**
+	 * Sets application object referehce. Application can be used in plugins
+	 * 
+	 * @param object $application Application object
+	 */
+	public function setApplication($application) {
+		$this->application = $application;
 	}
 	/**
 	 * Fetch prepared file template and return complete html document

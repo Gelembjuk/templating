@@ -12,17 +12,20 @@
  */
 function smarty_function_link($params, Smarty_Internal_Template $template)
 {
-	if (!function_exists('getApplicationInstance')) {
-		// smarty is used out of context of Gelembjuk\WebApp package
-		// just return empty string
+	$application = $template->getApplication();
+
+	if (!is_object($application)) {
 		return '';
 	}
-	
-	$application = getApplicationInstance();
 
 	// extract controller as it must be checked in application to know what controller builds a link
 	$controllername = $params['controller'];
 	unset($params['controller']);
+
+	if (empty($controllername) && isset($params['c'])) {
+		$controllername = $params['c'];
+		unset($params['c']);
+	} 
 	
 	return $application->makeUrl($controllername,$params);
 }
