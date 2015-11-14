@@ -46,7 +46,7 @@ class Pagination_Twig_Extension extends Twig_Extension
 
 				$linkprefix = '&';
 
-				if (strpos($link,'?') === null) {
+				if (strpos($link,'?') === false) {
 					$linkprefix = '?';
 				} elseif (substr($link,-1) == '&') {
 					$linkprefix = '';

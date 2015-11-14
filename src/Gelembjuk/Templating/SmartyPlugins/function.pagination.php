@@ -36,7 +36,7 @@ function smarty_function_pagination($params, Smarty_Internal_Template $template)
 
 	$linkprefix = '&';
 
-	if (strpos($link,'?') === null) {
+	if (strpos($link,'?') === false) {
 		$linkprefix = '?';
 	} elseif (substr($link,-1) == '&') {
 		$linkprefix = '';
