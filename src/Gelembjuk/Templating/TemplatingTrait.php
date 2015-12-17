@@ -35,6 +35,13 @@ trait TemplatingTrait {
 	* @var string
 	*/
 	protected $template_dir_orig;
+
+	/**
+	* Templates compilation directory. Path to a directory
+	*
+	* @var string
+	*/
+	protected $compile_dir_orig;
 	/**
 	 * Template variables 
 	 * 
@@ -78,7 +85,7 @@ trait TemplatingTrait {
 		}
 		
 		// compile dir is required and must be writable
-		$this->compile_dir  = $options['compiledir'];
+		$this->compile_dir_orig  = $options['compiledir'];
 		
 		$this->caching = $options['usecache'];
 		
@@ -191,14 +198,14 @@ trait TemplatingTrait {
 		if (!is_dir($this->template_dir_orig)) {
 			throw new \Exception(sprintf('Templates directory %s not found',$this->template_dir_orig));
 		}
-		if (trim($this->compile_dir) == '') {
+		if (trim($this->compile_dir_orig) == '') {
 			throw new \Exception('Templates compile directory is not set');
 		}
-		if (!is_dir($this->compile_dir)) {
-			throw new \Exception(sprintf('Templates compile directory %s not found',$this->compile_dir));
+		if (!is_dir($this->compile_dir_orig)) {
+			throw new \Exception(sprintf('Templates compile directory %s not found',$this->compile_dir_orig));
 		}
-		if (!is_writable($this->compile_dir)) {
-			throw new \Exception(sprintf('Templates compile directory %s is not writable',$this->compile_dir));
+		if (!is_writable($this->compile_dir_orig)) {
+			throw new \Exception(sprintf('Templates compile directory %s is not writable',$this->compile_dir_orig));
 		}
 		if ($this->caching) {
 			// if cache is On the cache path must be present

@@ -19,6 +19,7 @@ namespace Gelembjuk\Templating;
 
 class SmartyTemplating  extends \Smarty implements TemplatingInterface {
 	use TemplatingTrait;
+
 	/**
 	 * Init plugins and extra plugins on the engine
 	 * 
@@ -81,7 +82,8 @@ class SmartyTemplating  extends \Smarty implements TemplatingInterface {
 	 * @return string HTML document with all data included 
 	 */
 	protected function fetchFromFile() {
-		$this->template_dir = $this->template_dir_orig;
+		$this->setTemplateDir($this->template_dir_orig);
+		$this->setCompileDir($this->compile_dir_orig);
 		return $this->fetch($this->template.'.'.$this->templates_extension);
 	}
 	
@@ -91,6 +93,7 @@ class SmartyTemplating  extends \Smarty implements TemplatingInterface {
 	 * @return string HTML document with all data included 
 	 */
 	protected function fetchFromString() {
+		$this->setCompileDir($this->compile_dir_orig);
 		return $this->fetch('string:'.$this->template_data);
 	}
 }
