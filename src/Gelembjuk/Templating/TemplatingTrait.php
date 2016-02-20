@@ -136,9 +136,23 @@ trait TemplatingTrait {
 	 * 
 	 * @return boolean True if template file exists in a templates path
 	 */
-	public function checkTemplateExists($filepath,$options = array()) {
+	public function checkTemplateExists($filepath,$options = array(),$tmplpath = '') {
 		
-		$filepath = $this->template_dir_orig.$filepath;
+		if (is_array($this->template_dir_orig) && $tmplpath == '') {
+			foreach ($this->template_dir_orig as $path) {
+				$exists = $this->checkTemplateExists($filepath,$options,$path);
+				
+				if ($exists) {
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		
+		
+		$filepath = (($tmplpath != '')?$tmplpath:$this->template_dir_orig).$filepath;
 
 		if (!$options['extensionpresent']) {
 			$filepath .= '.'.$this->templates_extension;
@@ -192,11 +206,25 @@ trait TemplatingTrait {
 	 * @return boolean True on success and raises exception if there are problems
 	 */
 	protected function checkFileSystemTemplatingConfigured_PathCompileCache() {
-		if (trim($this->template_dir_orig) == '') {
-			throw new \Exception('Templates directory is not set');
-		}
-		if (!is_dir($this->template_dir_orig)) {
-			throw new \Exception(sprintf('Templates directory %s not found',$this->template_dir_orig));
+		if (is_array($this->template_dir_orig)) {
+			$found = false;
+			
+			foreach ($this->template_dir_orig as $path) {
+				if ($path != '' && is_dir($path)) {
+					$found = true;
+					break;
+				}
+			}
+			if (!$found) {
+				throw new \Exception('Templates directory is not set');
+			}
+		} else {
+			if (trim($this->template_dir_orig) == '') {
+				throw new \Exception('Templates directory is not set');
+			}
+			if (!is_dir($this->template_dir_orig)) {
+				throw new \Exception(sprintf('Templates directory %s not found',$this->template_dir_orig));
+			}
 		}
 		if (trim($this->compile_dir_orig) == '') {
 			throw new \Exception('Templates compile directory is not set');

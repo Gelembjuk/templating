@@ -10,6 +10,7 @@
  * Purpose:  outputs a url created with arguments
  * -------------------------------------------------------------
  */
+if (!function_exists('smarty_function_link')) {
 function smarty_function_link($params, Smarty_Internal_Template $template)
 {
 	$application = $template->getApplication();
@@ -28,5 +29,6 @@ function smarty_function_link($params, Smarty_Internal_Template $template)
 	} 
 	
 	return $application->makeUrl($controllername,$params);
+}
 }
 ?>
