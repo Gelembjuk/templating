@@ -287,6 +287,15 @@ trait TemplatingTrait {
 		$this->application = $application;
 	}
 	/**
+	 * Returns a path to a directory with plugins. Can be used for cases
+	 * when plugins should be used with an external application
+	 * 
+	 * @return string Path to a directory with native plugins
+	 */
+	public function getNativePluginsDir() {
+		return '';
+	}
+	/**
 	 * Fetch prepared file template and return complete html document
 	 * 
 	 * @return string HTML document with all data included 

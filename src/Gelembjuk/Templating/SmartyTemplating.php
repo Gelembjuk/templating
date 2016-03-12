@@ -42,6 +42,17 @@ class SmartyTemplating  extends \Smarty implements TemplatingInterface {
 		}
 	}
 	/**
+	 * Returns a path to a directory with plugins. Can be used for cases
+	 * when plugins should be used with an external application
+	 * 
+	 * @return string Path to a directory with native plugins
+	 */
+	public function getNativePluginsDir() {
+		if (is_dir(dirname(__FILE__).'/SmartyPlugins')) {
+			return dirname(__FILE__).'/SmartyPlugins';
+		}
+	}
+	/**
 	 * Empty all previously set template variables
 	 */
 	public function cleanVars() {

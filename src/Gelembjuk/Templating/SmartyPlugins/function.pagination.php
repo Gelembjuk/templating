@@ -10,6 +10,13 @@
  */
 function smarty_function_pagination($params, Smarty_Internal_Template $template)
 {
+
+	if ($params['fast'] == 'y' && method_exists($template,'buildPaginationFast')) {
+		// compability with old version
+		// DEPRECATED. To remove in next major version
+		return $template->buildPaginationFast($params['data'],true);	
+	}
+
 	$totalcount = $params['total'];
 	$start = $params['start'];
 	$limit = $params['limit'];
